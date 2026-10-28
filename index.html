@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MediSlot – Doctor Appointment Booking BY M.Adeeb Ali Softwer Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f7f6;--card:#fff;--ink:#0d2b2a;--mute:#5f7a78;--line:#d8e5e3;--brand:#0f766e;--brand2:#14b8a6;--busy:#fde047;--busyink:#713f12;--bad:#e11d48;--sel:#0d2b2a;--selink:#fff;
+--r:18px;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#081a19;--card:#10292a;--ink:#e8f5f3;--mute:#8fb0ad;--line:#1d3d3d;--brand:#2dd4bf;--brand2:#14b8a6;--sel:#e8f5f3;--selink:#081a19;--busy:#facc15;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#081a19;--card:#10292a;--ink:#e8f5f3;--mute:#8fb0ad;--line:#1d3d3d;--brand:#2dd4bf;--brand2:#14b8a6;--sel:#e8f5f3;--selink:#081a19;--busy:#facc15;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 16px/1.5 Figtree,system-ui,sans-serif}
+h1,h2,h3{font-family:'Bricolage Grotesque',Figtree,sans-serif;margin:0;letter-spacing:-.02em}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--brand2);outline-offset:2px}
+.wrap{max-width:1040px;margin:auto;padding:20px 16px 60px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font:800 1.4rem 'Bricolage Grotesque',sans-serif}
+.logo svg{width:38px;height:38px;animation:beat 2.4s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}12%{transform:scale(1.14)}24%{transform:scale(1)}36%{transform:scale(1.08)}}
+.tabs{display:flex;gap:4px;background:var(--card);padding:5px;border-radius:99px;border:1px solid var(--line)}
+.tabs button{border:0;background:none;padding:8px 18px;border-radius:99px;font-weight:600;color:var(--mute);transition:.25s}
+.tabs button[aria-selected=true]{background:var(--brand);color:#fff}
+.tabs button:not([aria-selected=true]):hover{color:var(--ink)}
+#theme{border:1px solid var(--line);background:var(--card);border-radius:50%;width:40px;height:40px}
+.hero{margin:34px 0 22px}
+.hero h1{font-size:clamp(2rem,6vw,3.6rem);line-height:1.02;max-width:14ch}
+.hero p{color:var(--mute);max-width:52ch;margin:12px 0 0}
+.grid{display:grid;grid-template-columns:1.6fr 1fr;gap:20px}
+@media(max-width:820px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.docs{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px}
+.doc{flex:0 0 auto;display:flex;gap:10px;align-items:center;border:1.5px solid var(--line);background:var(--bg);border-radius:14px;padding:10px 14px;text-align:left;transition:.2s}
+.doc[aria-pressed=true]{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,var(--card))}
+.doc i{font-style:normal;font-size:1.6rem}
+.doc b{display:block;font-weight:600}.doc small{color:var(--mute)}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px}
+.day{flex:0 0 58px;border:1.5px solid var(--line);background:var(--bg);border-radius:14px;padding:8px 0;text-align:center;transition:.2s}
+.day small{display:block;color:var(--mute)}.day b{font:800 1.2rem 'Bricolage Grotesque',sans-serif}
+.day[aria-pressed=true]{background:var(--sel);color:var(--selink);border-color:var(--sel)}.day[aria-pressed=true] small{color:inherit;opacity:.7}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.slot{border:1.5px solid var(--line);background:var(--bg);border-radius:12px;padding:10px 4px;font-weight:600;transition:transform .15s,background .2s}
+.slot:hover:not(:disabled){transform:translateY(-2px);border-color:var(--brand)}
+.slot[aria-pressed=true]{background:var(--brand);color:#fff;border-color:var(--brand);animation:pop .3s}
+.slot:disabled{cursor:not-allowed}
+.slot.busy{background:var(--busy);color:var(--busyink);border-color:transparent}
+.slot.busy::after{content:"Booked";display:block;font-size:.65rem;font-weight:600;opacity:.8}
+.slot.past{opacity:.35}
+@keyframes pop{50%{transform:scale(1.1)}}
+.legend{display:flex;gap:16px;color:var(--mute);font-size:.85rem;margin-top:14px}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-1px;background:var(--bg);border:1.5px solid var(--line)}
+.legend .y::before{background:var(--busy);border-color:var(--busy)}.legend .s::before{background:var(--brand);border-color:var(--brand)}
+label{display:block;font-weight:600;margin:12px 0 4px;font-size:.9rem}
+input,select{width:100%;padding:11px 13px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg)}
+.btn{width:100%;margin-top:16px;padding:13px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-weight:700;transition:.2s}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn:disabled{opacity:.45;pointer-events:none}
+.sum{background:var(--bg);border-radius:12px;padding:12px;margin-top:12px;color:var(--mute);min-height:48px}
+.sum b{color:var(--ink)}
+.list{display:grid;gap:10px;margin-top:14px}
+.appt{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);border-left:5px solid var(--brand);border-radius:14px;padding:12px 14px;animation:in .35s}
+@keyframes in{from{opacity:0;transform:translateX(-12px)}}
+.appt small{color:var(--mute);display:block}
+.x{border:1.5px solid var(--bad);color:var(--bad);background:none;border-radius:10px;padding:6px 12px;font-weight:600}
+.x:hover{background:var(--bad);color:#fff}
+.empty{color:var(--mute);text-align:center;padding:28px 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+.stat{background:var(--bg);border-radius:14px;padding:14px}.stat small{color:var(--mute)}
+.stat b{display:block;font:800 1.7rem 'Bricolage Grotesque',sans-serif;color:var(--brand)}
+.bars{display:flex;align-items:flex-end;gap:3px;height:150px;overflow-x:auto}
+.bar{flex:1 0 12px;background:linear-gradient(var(--brand2),var(--brand));border-radius:5px 5px 0 0;min-height:2px;transform-origin:bottom;animation:grow .6s both}
+@keyframes grow{from{transform:scaleY(0)}}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1 1 140px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,140px);background:var(--sel);color:var(--selink);padding:12px 20px;border-radius:99px;transition:.4s cubic-bezier(.2,1.4,.4,1);z-index:9}
+.toast.on{transform:translate(-50%,0)}
+[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="logo"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="12" fill="#0f766e"/><path d="M8 21h6l3-7 5 13 3-6h7" fill="none" stroke="#fde047" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>MediSlot BY M.Adeeb Ali Softwer Developer</div>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-p="book" aria-selected="true">Book</button>
+    <button role="tab" data-p="mine" aria-selected="false">My bookings</button>
+    <button role="tab" data-p="earn" aria-selected="false">Earnings</button>
+  </nav>
+  <button id="theme" aria-label="Toggle theme">🌓</button>
+</header>
+
+<section class="hero"><h1>See a doctor, on your time.</h1><p>Pick a doctor, choose a free slot and confirm in seconds. Yellow slots are already taken.</p></section>
+
+<main>
+<section id="book" class="grid">
+  <div class="card">
+    <h2>Choose doctor and time</h2><br>
+    <div class="docs" id="docs"></div>
+    <div class="days" id="days"></div>
+    <div class="slots" id="slots"></div>
+    <div class="legend"><span>Free</span><span class="y">Booked</span><span class="s">Selected</span></div>
+  </div>
+  <div class="card">
+    <h2>Your details</h2>
+    <label for="name">Full name</label><input id="name" autocomplete="name" placeholder="Ayesha Khan">
+    <label for="phone">Phone</label><input id="phone" type="tel" autocomplete="tel" placeholder="0300 1234567">
+    <div class="sum" id="sum">Select a time slot to continue.</div>
+    <button class="btn" id="confirm" disabled>Confirm appointment</button>
+  </div>
+</section>
+
+<section id="mine" class="card" hidden>
+  <h2>My bookings</h2>
+  <div class="list" id="mylist"></div>
+</section>
+
+<section id="earn" class="card" hidden>
+  <h2>Doctor earnings</h2>
+  <p style="color:var(--mute);margin:6px 0 14px">Add each day’s earnings. The monthly report updates automatically.</p>
+  <div class="row">
+    <div><label for="edoc">Doctor</label><select id="edoc"></select></div>
+    <div><label for="edate">Date</label><input id="edate" type="date"></div>
+    <div><label for="eamt">Amount (Rs)</label><input id="eamt" type="number" min="0" placeholder="12000"></div>
+  </div>
+  <button class="btn" id="addE">Save daily earnings</button>
+  <h3 style="margin-top:26px">Monthly report</h3>
+  <div class="row"><div><label for="emon">Month</label><input id="emon" type="month"></div></div>
+  <div class="stats" id="stats"></div>
+  <div class="bars" id="bars" aria-label="Daily earnings chart"></div>
+</section>
+</main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const DOCS=[{id:1,n:"Dr. Sana Malik",s:"Cardiologist",e:"🫀"},{id:2,n:"Dr. Omar Raza",s:"Dermatologist",e:"🧴"},{id:3,n:"Dr. Hina Shah",s:"Pediatrician",e:"🧸"}];
+const TIMES=[...Array(16)].map((_,i)=>{const m=540+i*30;return `${String(m/60|0).padStart(2,"0")}:${m%60?"30":"00"}`});
+const iso=d=>d.toLocaleDateString("en-CA"), money=n=>"Rs "+n.toLocaleString("en-PK");
+const fmt=t=>{const[h,m]=t.split(":");return `${h%12||12}:${m} ${h<12?"AM":"PM"}`};
+const pretty=d=>new Date(d+"T00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"});
+const load=(k,f)=>{try{return JSON.parse(localStorage.getItem(k))||f}catch{return f}};
+const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}};
+
+const today=iso(new Date());
+const S={doc:1,date:today,time:null,
+  bookings:load("ms_b",[{id:"s1",doc:1,date:today,time:"10:00",name:"Sample"},{id:"s2",doc:1,date:today,time:"11:30",name:"Sample"},{id:"s3",doc:2,date:today,time:"09:30",name:"Sample"}]),
+  earn:load("ms_e",[])};
+const persist=()=>{save("ms_b",S.bookings);save("ms_e",S.earn)};
+
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.i);toast.i=setTimeout(()=>t.classList.remove("on"),2600)}
+const check=()=>{$("#confirm").disabled=!(S.time&&$("#name").value.trim().length>1&&$("#phone").value.trim().length>6)};
+
+function render(){
+  $("#docs").innerHTML=DOCS.map(d=>`<button class="doc" data-d="${d.id}" aria-pressed="${d.id==S.doc}"><i>${d.e}</i><span><b>${d.n}</b><small>${d.s}</small></span></button>`).join("");
+  $("#days").innerHTML=[...Array(14)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()+i);const k=iso(d);
+    return `<button class="day" data-k="${k}" aria-pressed="${k==S.date}"><small>${d.toLocaleDateString("en",{weekday:"short"})}</small><b>${d.getDate()}</b></button>`}).join("");
+  const taken=new Set(S.bookings.filter(b=>b.doc==S.doc&&b.date==S.date).map(b=>b.time));
+  const n=new Date(),nowT=`${String(n.getHours()).padStart(2,"0")}:${String(n.getMinutes()).padStart(2,"0")}`;
+  $("#slots").innerHTML=TIMES.map(t=>{const busy=taken.has(t),past=S.date==today&&t<nowT;
+    return `<button class="slot${busy?" busy":past?" past":""}" data-t="${t}" aria-pressed="${t==S.time}" ${busy||past?"disabled":""}>${fmt(t)}</button>`}).join("");
+  const d=DOCS.find(x=>x.id==S.doc);
+  $("#sum").innerHTML=S.time?`<b>${d.n}</b> (${d.s})<br>${pretty(S.date)} at ${fmt(S.time)}`:"Select a time slot to continue.";
+  check();
+  const mine=S.bookings.filter(b=>b.name!=="Sample").sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  $("#mylist").innerHTML=mine.length?mine.map(b=>{const dd=DOCS.find(x=>x.id==b.doc);
+    return `<div class="appt"><div><b>${dd.n}</b><small>${pretty(b.date)} · ${fmt(b.time)}</small></div><button class="x" data-c="${b.id}">Cancel</button></div>`}).join(""):`<div class="empty">No bookings yet. Pick a slot on the Book tab.</div>`;
+  report();
+}
+
+function report(){
+  const m=$("#emon").value||today.slice(0,7), doc=+$("#edoc").value||1;
+  const rows=S.earn.filter(e=>e.doc==doc&&e.date.startsWith(m)), total=rows.reduce((a,e)=>a+e.amt,0);
+  const days=new Date(+m.slice(0,4),+m.slice(5),0).getDate(), by={};
+  rows.forEach(e=>by[+e.date.slice(8)]=e.amt);
+  const max=Math.max(1,...Object.values(by)), best=Object.entries(by).sort((a,b)=>b[1]-a[1])[0];
+  $("#stats").innerHTML=[["Total this month",money(total)],["Days recorded",rows.length],["Daily average",money(rows.length?Math.round(total/rows.length):0)],["Best day",best?"Day "+best[0]:"–"]].map(([a,b])=>`<div class="stat"><small>${a}</small><b>${b}</b></div>`).join("");
+  $("#bars").innerHTML=[...Array(days)].map((_,i)=>{const v=by[i+1]||0;return `<div class="bar" title="Day ${i+1}: ${money(v)}" style="height:${v/max*100}%;animation-delay:${i*15}ms;${v?"":"opacity:.15"}"></div>`}).join("");
+}
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button");if(!t)return;
+  if(t.classList.contains("slot")){S.time=t.dataset.t;render()}
+  else if(t.dataset.d){S.doc=+t.dataset.d;S.time=null;render()}
+  else if(t.dataset.k){S.date=t.dataset.k;S.time=null;render()}
+  else if(t.dataset.c){S.bookings=S.bookings.filter(b=>b.id!==t.dataset.c);persist();render();toast("Appointment cancelled. The slot is free again.")}
+  else if(t.dataset.p){$$("[role=tab]").forEach(b=>b.setAttribute("aria-selected",b==t));["book","mine","earn"].forEach(id=>$("#"+id).hidden=id!=t.dataset.p)}
+});
+$("#name").oninput=$("#phone").oninput=check;
+$("#confirm").onclick=()=>{
+  if(S.bookings.some(b=>b.doc==S.doc&&b.date==S.date&&b.time==S.time))return toast("That slot was just taken. Pick another.");
+  S.bookings.push({id:String(Date.now()),doc:S.doc,date:S.date,time:S.time,name:$("#name").value.trim(),phone:$("#phone").value.trim()});
+  persist();S.time=null;render();toast("Appointment confirmed. See it under My bookings.");
+};
+$("#addE").onclick=()=>{
+  const date=$("#edate").value,amt=+$("#eamt").value,doc=+$("#edoc").value;
+  if(!date||!(amt>0))return toast("Enter a date and an amount above 0.");
+  const ex=S.earn.find(x=>x.doc==doc&&x.date==date);ex?ex.amt=amt:S.earn.push({doc,date,amt});
+  persist();$("#emon").value=date.slice(0,7);$("#eamt").value="";report();toast("Earnings saved for "+pretty(date)+".");
+};
+$("#edoc").innerHTML=DOCS.map(d=>`<option value="${d.id}">${d.n}</option>`).join("");
+$("#edoc").onchange=$("#emon").onchange=report;
+$("#edate").value=today;$("#emon").value=today.slice(0,7);
+$("#theme").onclick=()=>{const r=document.documentElement,dark=r.dataset.theme?r.dataset.theme=="dark":matchMedia("(prefers-color-scheme:dark)").matches;r.dataset.theme=dark?"light":"dark"};
+render();
+</script>
+</body>
+</html>
